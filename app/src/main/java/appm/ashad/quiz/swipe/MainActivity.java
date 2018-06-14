@@ -41,16 +41,16 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-    List<String> mylistofanswer=new ArrayList<>();
 
-    public String question;
-    public int i;
+//    public String question;
+//    public int i;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    ArrayList<String> name = new ArrayList<>();
+    ArrayList<String> quest = new ArrayList<>();
+    ArrayList<String> ans = new ArrayList<>();
 
 
     @Override
@@ -85,23 +85,31 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("jsonarray","is "+jsonArrayofmine);
 
 
-                            for (i=0;i<jsonArrayofmine.length();i++)
+                            for (int i=0;i<jsonArrayofmine.length(); i++)
                             {
                                 //taking quesstion and answer
                                 JSONObject jsonObjectinarray=jsonArrayofmine.getJSONObject(i);
 
-                                question=jsonObjectinarray.getString("question");
+                                String question=jsonObjectinarray.getString("question");
                                 String answer=jsonObjectinarray.getString("Answer");
-//                                mylistofqueestion.add(i,question);
 // mExampleAdapter = new ExampleAdapter(MainActivity.this, mExampleList);
-                                mylistofanswer.add(i,answer);
 
+//
+                                quest.add(i,question);
 
-
-                                name.add(i,question);
-
+                                ans.add(i,answer);
 
                             }
+
+                            // Create the adapter that will return a fragment for each of the three
+                            // primary sections of the activity.
+
+
+                            mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), quest, ans);
+
+                            // Set up the ViewPager with the sections adapter.
+                            mViewPager = (ViewPager) findViewById(R.id.container);
+                            mViewPager.setAdapter(mSectionsPagerAdapter);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -131,19 +139,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
 
-
-
-        name.add("Hello");
-        name.add("lelo");
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), name);
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
     }
@@ -180,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
+        private static final String ARG_SECTION_NUMBER1 = "section_number1";
 
         public PlaceholderFragment() {
         }
@@ -188,12 +185,17 @@ public class MainActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(String text) {
+        public static PlaceholderFragment newInstance(String text, String s) {
             PlaceholderFragment fragment = new PlaceholderFragment();
+            PlaceholderFragment fragment1 = new PlaceholderFragment();
             Bundle args = new Bundle();
+            Bundle args1 = new Bundle();
             args.putString(ARG_SECTION_NUMBER, text);
+            args.putString(ARG_SECTION_NUMBER1, s);
             fragment.setArguments(args);
+            fragment1.setArguments(args1);
             return fragment;
+
         }
 
         @Override
@@ -201,7 +203,9 @@ public class MainActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
+            TextView answer = (TextView) rootView.findViewById(R.id.section_label2);
             textView.setText(getArguments().getString(ARG_SECTION_NUMBER));
+            answer.setText(getArguments().getString(ARG_SECTION_NUMBER1));
             return rootView;
         }
     }
@@ -211,24 +215,26 @@ public class MainActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        ArrayList<String> name = new ArrayList<>();
+        ArrayList<String> quest = new ArrayList<>();
+        ArrayList<String> ans = new ArrayList<>();
 
-        public SectionsPagerAdapter(FragmentManager fm, ArrayList<String> name) {
+        public SectionsPagerAdapter(FragmentManager fm, ArrayList<String> quest, ArrayList<String> ans) {
             super(fm);
-            this.name = name;
+            this.quest = quest;
+            this.ans = ans;
         }
 
         @Override
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(name.get(position));
+            return PlaceholderFragment.newInstance(quest.get(position),ans.get(position));
         }
 
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 8;
+            return 6;
         }
 
 //        @Override

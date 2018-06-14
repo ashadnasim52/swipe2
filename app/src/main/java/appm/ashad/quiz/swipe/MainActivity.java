@@ -1,5 +1,4 @@
 package appm.ashad.quiz.swipe;
-
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,14 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
-
-
-
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -47,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    List<String> mylistofanswer=new ArrayList<>();
+
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -62,87 +58,31 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-
-//
-//
-//        mylistofanswer.add("ashad");
-//        mylistofanswer.add(",\"nasum\",\"is\"");
-//        mylistofanswer.add("fsdfdfgdfg");
-//        mylistofanswer.add("asfdsdfdsfhad");
-        final ArrayList<String> name = new ArrayList<>();
-
-
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(),name);
+        ArrayList<String> name = new ArrayList<>();
+        name.add("Hello");
+        name.add("Two");
+        name.add("Three");
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), name);
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+        request();
+
+
+
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
-
-
-
-
-//url to make request
-        String myurl="https://learncodeonline.in/api/android/datastructure.json";
-
-        JsonObjectRequest myjsonObjectRequest=new JsonObjectRequest(Request.Method.GET, myurl, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("response","is "+response);
-
-                        try {
-
-                            JSONArray jsonArrayofmine=response.getJSONArray("questions");
-
-
-
-                            String jsonString = jsonArrayofmine.toString();
-
-
-                            Log.i("jsonarray","is "+jsonArrayofmine);
-
-
-                            for (int i=0;i<jsonArrayofmine.length();i++)
-                            {
-                                //taking quesstion and answer
-                                JSONObject jsonObjectinarray=jsonArrayofmine.getJSONObject(i);
-
-                                String question=jsonObjectinarray.getString("question");
-                                String answer=jsonObjectinarray.getString("Answer");
-                                name.add(question);
-
-
-                            }
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //show snackbar
-            }
-        }
-
-        );
-        mysingleton.getInstance(getApplicationContext()).addToRequestque(myjsonObjectRequest);
-
-
-
-
-
 
     }
 
@@ -153,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -187,21 +126,20 @@ public class MainActivity extends AppCompatActivity {
          * Returns a new instance of this fragment for the given section
          * number.
          */
-        public static PlaceholderFragment newInstance(String  text) {
+        public static PlaceholderFragment newInstance(String text) {
             PlaceholderFragment fragment = new PlaceholderFragment();
             Bundle args = new Bundle();
-            args.putString(ARG_SECTION_NUMBER,text);
-
+            args.putString(ARG_SECTION_NUMBER, text);
             fragment.setArguments(args);
             return fragment;
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getArguments().getString(ARG_SECTION_NUMBER));
-
             return rootView;
         }
     }
@@ -211,12 +149,11 @@ public class MainActivity extends AppCompatActivity {
      * one of the sections/tabs/pages.
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
         ArrayList<String> name = new ArrayList<>();
 
-        public SectionsPagerAdapter(FragmentManager fm,ArrayList<String> name) { //TODO
+        public SectionsPagerAdapter(FragmentManager fm, ArrayList<String> name) {
             super(fm);
-            this.name=name;
+            this.name = name;
         }
 
         @Override
@@ -229,13 +166,25 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 5;
+            return name.size();
         }
+
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            switch (position) {
+//                case 0:
+//                    return "SECTION 1";
+//                case 1:
+//                    return "SECTION 2";
+//                case 2:
+//                    return "SECTION 3";
+//            }
+//            return null;
+//        }
     }
 
 
-
-    public void myjsonrequest()
+    public void request()
     {
         //url to make request
         String myurl="https://learncodeonline.in/api/android/datastructure.json";
@@ -252,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//                            String jsonString = jsonArrayofmine.toString();
+                            String jsonString = jsonArrayofmine.toString();
 
 
                             Log.i("jsonarray","is "+jsonArrayofmine);
@@ -265,10 +214,11 @@ public class MainActivity extends AppCompatActivity {
 
                                 String question=jsonObjectinarray.getString("question");
                                 String answer=jsonObjectinarray.getString("Answer");
-
+//                                mylistofqueestion.add(i,question);
+// mExampleAdapter = new ExampleAdapter(MainActivity.this, mExampleList);
+                                mylistofanswer.add(i,answer);
 
                             }
-
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -288,5 +238,4 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 }

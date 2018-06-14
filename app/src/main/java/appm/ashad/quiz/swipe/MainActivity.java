@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     List<String> mylistofanswer=new ArrayList<>();
 
+    public String question;
+    public int i;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -58,17 +60,6 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        name.add("Hello");
-
-        name.add("Three");
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), name);
-
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
@@ -94,12 +85,12 @@ public class MainActivity extends AppCompatActivity {
                             Log.i("jsonarray","is "+jsonArrayofmine);
 
 
-                            for (int i=0;i<jsonArrayofmine.length();i++)
+                            for (i=0;i<jsonArrayofmine.length();i++)
                             {
                                 //taking quesstion and answer
                                 JSONObject jsonObjectinarray=jsonArrayofmine.getJSONObject(i);
 
-                                String question=jsonObjectinarray.getString("question");
+                                question=jsonObjectinarray.getString("question");
                                 String answer=jsonObjectinarray.getString("Answer");
 //                                mylistofqueestion.add(i,question);
 // mExampleAdapter = new ExampleAdapter(MainActivity.this, mExampleList);
@@ -107,12 +98,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+                                name.add(i,question);
+
+
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        name.add("ashad");
+
 
 
                     }
@@ -137,6 +131,17 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
+        name.add("Hello");
+        name.add("lelo");
+
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), name);
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+
 
     }
 
@@ -220,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 6;
+            return 8;
         }
 
 //        @Override

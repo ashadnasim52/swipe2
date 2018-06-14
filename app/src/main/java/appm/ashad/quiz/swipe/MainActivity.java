@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    ArrayList<String> name = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +60,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        ArrayList<String> name = new ArrayList<>();
         name.add("Hello");
-        name.add("Two");
+
         name.add("Three");
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), name);
 
@@ -72,7 +73,60 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
 
-        request();
+        //url to make request
+        String myurl="https://learncodeonline.in/api/android/datastructure.json";
+
+        JsonObjectRequest myjsonObjectRequest=new JsonObjectRequest(Request.Method.GET, myurl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i("response","is "+response);
+
+                        try {
+
+                            JSONArray jsonArrayofmine=response.getJSONArray("questions");
+
+
+
+                            String jsonString = jsonArrayofmine.toString();
+
+
+                            Log.i("jsonarray","is "+jsonArrayofmine);
+
+
+                            for (int i=0;i<jsonArrayofmine.length();i++)
+                            {
+                                //taking quesstion and answer
+                                JSONObject jsonObjectinarray=jsonArrayofmine.getJSONObject(i);
+
+                                String question=jsonObjectinarray.getString("question");
+                                String answer=jsonObjectinarray.getString("Answer");
+//                                mylistofqueestion.add(i,question);
+// mExampleAdapter = new ExampleAdapter(MainActivity.this, mExampleList);
+                                mylistofanswer.add(i,answer);
+
+
+
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        name.add("ashad");
+
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //show snackbar
+            }
+        }
+
+        );
+        mysingleton.getInstance(getApplicationContext()).addToRequestque(myjsonObjectRequest);
+
+
 
 
 
@@ -166,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return name.size();
+            return 6;
         }
 
 //        @Override
@@ -184,58 +238,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void request()
-    {
-        //url to make request
-        String myurl="https://learncodeonline.in/api/android/datastructure.json";
-
-        JsonObjectRequest myjsonObjectRequest=new JsonObjectRequest(Request.Method.GET, myurl, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.i("response","is "+response);
-
-                        try {
-
-                            JSONArray jsonArrayofmine=response.getJSONArray("questions");
-
-
-
-                            String jsonString = jsonArrayofmine.toString();
-
-
-                            Log.i("jsonarray","is "+jsonArrayofmine);
-
-
-                            for (int i=0;i<jsonArrayofmine.length();i++)
-                            {
-                                //taking quesstion and answer
-                                JSONObject jsonObjectinarray=jsonArrayofmine.getJSONObject(i);
-
-                                String question=jsonObjectinarray.getString("question");
-                                String answer=jsonObjectinarray.getString("Answer");
-//                                mylistofqueestion.add(i,question);
-// mExampleAdapter = new ExampleAdapter(MainActivity.this, mExampleList);
-                                mylistofanswer.add(i,answer);
-
-                            }
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //show snackbar
-            }
-        }
-
-        );
-        mysingleton.getInstance(getApplicationContext()).addToRequestque(myjsonObjectRequest);
-
-
-    }
 }
